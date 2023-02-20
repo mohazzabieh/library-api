@@ -9,9 +9,9 @@ import configs from './configs';
     ConfigModule.forRoot({
       load: [configs],
       cache: true,
-    })
+    }),
   ],
   providers: [EnvService],
-  exports: [EnvService]
+  exports: [EnvService],
 })
-export class EnvModule { }
+export class EnvModule {}

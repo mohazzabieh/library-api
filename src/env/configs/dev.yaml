@@ -1,4 +1,4 @@
 port: 7700
 mongo:
-  url: 'mongo://localhost:27017'
-  db: 'nest-mohazabieh-library-api'
+  url: 'mongodb://0.0.0.0:27017/'
+  db: 'mohazabieh_library_api'

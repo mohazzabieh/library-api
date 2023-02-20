@@ -1,0 +1,9 @@
+scalar Email
+
+type Query {
+  users: String
+}
+
+type Mutation {
+  login(username: Email!, password: String!): String!
+}
