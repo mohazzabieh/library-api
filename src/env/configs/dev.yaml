@@ -1,0 +1,4 @@
+port: 7700
+mongo:
+  url: 'mongo://localhost:27017'
+  db: 'nest-mohazabieh-library-api'
