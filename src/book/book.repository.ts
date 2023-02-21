@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ForbiddenException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MongoRepository } from 'typeorm';
 import { Book } from './book.entity';
 import { BookDto, AdminBookDto, BookDtoList } from './dtos/book.dto';
 import { ObjectId } from 'mongodb';
-import { UserDto } from 'src/graphql';
+import { UserDto } from '../user/dtos/user.dto';
 
 @Injectable()
 export class BookRepository {
@@ -57,13 +57,13 @@ export class BookRepository {
     });
 
     if (book.loaned) {
-      throw new Error('Book is already loaned!');
+      throw new ForbiddenException('Book is already loaned!');
     }
 
     const now = new Date();
 
     if (returnDate <= now) {
-      throw new Error('Return date must be greater that today');
+      throw new ForbiddenException('Return date must be greater that today');
     }
 
     await this.bookRepositry.updateOne(
@@ -91,11 +91,11 @@ export class BookRepository {
     });
 
     if (!book.loaned) {
-      throw new Error('Book is not borrowed!');
+      throw new ForbiddenException('Book is not borrowed!');
     }
 
     if (book.loanedBy._id.toString() !== user._id) {
-      throw new Error('Book has not been borrowed by you!');
+      throw new ForbiddenException('Book has not been borrowed by you!');
     }
 
     await this.bookRepositry.updateOne(

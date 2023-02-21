@@ -67,4 +67,9 @@ export class UserRepository {
       })),
     };
   }
+
+  async insertMany(users: any[]): Promise<User[]> {
+    await this.userRepositry.insertMany(users);
+    return this.userRepositry.find();
+  }
 }

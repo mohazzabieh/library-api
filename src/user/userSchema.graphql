@@ -8,5 +8,5 @@ type UserDtoList {
 }
 
 type Query {
-  allUsers: UserDtoList
+  usersList: UserDtoList
 }

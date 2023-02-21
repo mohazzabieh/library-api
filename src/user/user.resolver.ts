@@ -1,8 +1,8 @@
 import { UseGuards } from '@nestjs/common';
 import { Query, Resolver } from '@nestjs/graphql';
-import { BearerGuard } from 'src/auth/bearer.guard';
-import { RoleGuard } from 'src/auth/role.guard';
-import { Role } from 'src/decorators/role.decorator';
+import { BearerGuard } from '../auth/bearer.guard';
+import { RoleGuard } from '../auth/role.guard';
+import { Role } from '../decorators/role.decorator';
 import { UserDtoList } from './dtos/user.dto';
 import { UserService } from './user.service';
 
@@ -14,7 +14,7 @@ export class UserResolver {
   @Role('Admin')
   @UseGuards(RoleGuard)
   @Query(() => UserDtoList)
-  async allUsers(): Promise<UserDtoList> {
+  async usersList(): Promise<UserDtoList> {
     return this.userService.getAllUsers();
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { BookRepository } from './book.repository';
 import { BookDtoList } from './dtos/book.dto';
-import { UserRole, UserDto } from 'src/user/dtos/user.dto';
+import { UserRole, UserDto } from '../user/dtos/user.dto';
 import { ObjectId } from 'mongodb';
 
 @Injectable()

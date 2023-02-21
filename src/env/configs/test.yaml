@@ -1,0 +1,4 @@
+mongo:
+  url: 'mongodb://0.0.0.0:27017/'
+  db: 'mohazabieh_library_api_test'
+salt: '3ee25b5917c7a7b4a20fd1fb539b98a6'

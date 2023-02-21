@@ -1,8 +1,8 @@
 import { UseGuards } from '@nestjs/common';
 import { Query, Resolver, Mutation, Args } from '@nestjs/graphql';
-import { BearerGuard } from 'src/auth/bearer.guard';
+import { BearerGuard } from '../auth/bearer.guard';
 import { BookService } from './book.service';
-import { User } from 'src/decorators/user.decorator';
+import { User } from '../decorators/user.decorator';
 import { BookDtoList } from './dtos/book.dto';
 import { ObjectId } from 'mongodb';
 

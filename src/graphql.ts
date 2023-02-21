@@ -30,7 +30,7 @@ export interface BookDtoList {
 
 export interface IQuery {
     booksList(): Nullable<BookDtoList> | Promise<Nullable<BookDtoList>>;
-    allUsers(): Nullable<UserDtoList> | Promise<Nullable<UserDtoList>>;
+    usersList(): Nullable<UserDtoList> | Promise<Nullable<UserDtoList>>;
 }
 
 export interface UserDto {

@@ -16,7 +16,7 @@ export class BearerGuard implements CanActivate {
     const { req } = ctx.getContext();
 
     if (req.headers && req.headers.authorization) {
-      const token = req.headers.authorization.replace('Bearer ', '');
+      const token = req.headers.authorization.replace(/Bearer /i, '');
 
       const user = await this.authService.validateToken(token);
 

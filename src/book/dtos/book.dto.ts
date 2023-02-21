@@ -1,4 +1,4 @@
-import { UserDto } from 'src/graphql';
+import { UserDto } from '../../user/dtos/user.dto';
 
 export type BookDto = {
   _id?: string;
