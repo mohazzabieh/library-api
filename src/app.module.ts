@@ -9,6 +9,11 @@ import { UserResolver } from './user/user.resolver';
 import { EmailScalar } from './scalars/email.scalar';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { EnvService } from './env/env.service';
+import { AuthResolver } from './auth/auth.resolver';
+import { BookModule } from './book/book.module';
+import { DateScalar } from './scalars/date.scalar';
+import { BookResolver } from './book/book.resolver';
+import { ObjectIdScalar } from './scalars/objectId.scalar';
 
 @Module({
   imports: [
@@ -29,7 +34,11 @@ import { EnvService } from './env/env.service';
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       typePaths: ['./**/*.graphql'],
-      resolvers: { Email: EmailScalar },
+      resolvers: {
+        Email: EmailScalar,
+        Date: DateScalar,
+        ObjectId: ObjectIdScalar,
+      },
       definitions: {
         path: join(process.cwd(), 'src/graphql.ts'),
       },
@@ -38,7 +47,8 @@ import { EnvService } from './env/env.service';
     }),
     AuthModule,
     UserModule,
+    BookModule,
   ],
-  providers: [UserResolver],
+  providers: [AuthResolver, UserResolver, BookResolver],
 })
 export class AppModule {}

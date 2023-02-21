@@ -2,18 +2,19 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MongoRepository } from 'typeorm';
 import { User } from '../../user/user.entity';
-import { users } from '../data/users';
-import { UserDto } from 'src/user/dtos/user.dto';
+import { users, IUSer } from '../data/users';
+import { AuthService } from 'src/auth/auth.service';
 
 @Injectable()
 export class UserSeederService {
   constructor(
     @InjectRepository(User)
     private readonly userRepositry: MongoRepository<User>,
+    private readonly authService: AuthService,
   ) {}
 
   create(): Array<Promise<User>> {
-    return users.map(async (user: UserDto) => {
+    return users.map(async (user: IUSer) => {
       return await this.userRepositry
         .findOne({
           where: {
@@ -26,7 +27,15 @@ export class UserSeederService {
           if (dbUser) {
             return Promise.resolve(null);
           }
-          return Promise.resolve(await this.userRepositry.insertOne(user));
+
+          const password = this.authService.hashPassword(user.password);
+
+          return Promise.resolve(
+            await this.userRepositry.insertOne({
+              ...user,
+              password,
+            }),
+          );
         })
         .catch((error) => Promise.reject(error));
     });

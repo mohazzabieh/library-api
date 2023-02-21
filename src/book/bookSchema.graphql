@@ -1,0 +1,24 @@
+scalar Date
+scalar ObjectId
+
+type BookDto {
+  _id: ObjectId!
+  title: String!
+  Author: String!
+  loaned: Boolean!
+  loanedDate: Date
+  returnDate: Date
+  loanedBy: UserDto
+}
+type BookDtoList {
+  books: [BookDto]
+}
+
+type Query {
+  booksList: BookDtoList
+}
+
+type Mutation {
+  loanBook(bookId: ObjectId!, returnDate: Date!): Boolean
+  returnBook(bookId: ObjectId!): Boolean
+}

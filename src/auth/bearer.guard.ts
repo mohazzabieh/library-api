@@ -1,4 +1,9 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { GqlExecutionContext } from '@nestjs/graphql';
 
@@ -10,17 +15,17 @@ export class BearerGuard implements CanActivate {
     const ctx = GqlExecutionContext.create(context);
     const { req } = ctx.getContext();
 
-    //     if (err || !user) {
-    //       throw new UnauthorizedException();
-    //     }
+    if (req.headers && req.headers.authorization) {
+      const token = req.headers.authorization.replace('Bearer ', '');
 
-    req.user = {
-      username: 'jhgjkgjgh',
-      //role: UserRole.Admin,
-      id: 'as,jhads',
-      token: '1287687162',
-    };
+      const user = await this.authService.validateToken(token);
 
-    return true;
+      if (user) {
+        req.user = user;
+        return true;
+      }
+    }
+
+    throw new UnauthorizedException();
   }
 }

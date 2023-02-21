@@ -1,9 +1,25 @@
-import { UserDto, UserRole } from 'src/user/dtos/user.dto';
+import { UserRole } from 'src/user/dtos/user.dto';
 
-export const users: UserDto[] = [
+export interface IUSer {
+  username: string;
+  password: string;
+  role: UserRole;
+}
+
+export const users: IUSer[] = [
   {
-    username: 'admin',
+    username: 'admin@demo.com',
     role: UserRole.Admin,
-    token: 'asdfasd',
+    password: 'admin',
+  },
+  {
+    username: 'user1@demo.com',
+    role: UserRole.User,
+    password: 'user1',
+  },
+  {
+    username: 'user2@demo.com',
+    role: UserRole.User,
+    password: 'user2',
   },
 ];

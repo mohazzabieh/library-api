@@ -1,17 +1,20 @@
-import { Query, Resolver, Mutation, Args } from '@nestjs/graphql';
+import { UseGuards } from '@nestjs/common';
+import { Query, Resolver } from '@nestjs/graphql';
+import { BearerGuard } from 'src/auth/bearer.guard';
+import { RoleGuard } from 'src/auth/role.guard';
+import { Role } from 'src/decorators/role.decorator';
+import { UserDtoList } from './dtos/user.dto';
+import { UserService } from './user.service';
 
+@UseGuards(BearerGuard)
 @Resolver()
 export class UserResolver {
-  @Query(() => String)
-  async users() {
-    return 'hiii';
-  }
+  constructor(private readonly userService: UserService) {}
 
-  @Mutation(() => String)
-  async login(
-    @Args('username') username: string,
-    @Args('password') password: string,
-  ) {
-    return `Hello, ${username}: ${password}`;
+  @Role('Admin')
+  @UseGuards(RoleGuard)
+  @Query(() => UserDtoList)
+  async allUsers(): Promise<UserDtoList> {
+    return this.userService.getAllUsers();
   }
 }

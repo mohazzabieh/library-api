@@ -1,11 +1,14 @@
 export enum UserRole {
-  Admin,
-  User,
+  Admin = 'Admin',
+  User = 'User',
 }
 
 export interface UserDto {
-  id?: string;
+  _id: string;
   username: string;
-  token: string;
   role: UserRole;
+}
+
+export class UserDtoList {
+  users: UserDto[];
 }

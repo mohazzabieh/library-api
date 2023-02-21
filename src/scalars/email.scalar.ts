@@ -13,16 +13,16 @@ export const EmailScalar = new GraphQLScalarType({
   name: 'Email',
   description: 'Validate Entry by checking vs standard email format',
 
-  serialize(value: string | null) {
-    return value ? value.trim() : null;
-  },
-
   parseValue(value: string) {
     if (!value) return null;
 
     if (validateEmail(value)) {
       return value;
     }
+  },
+
+  serialize(value: string | null) {
+    return value ? value.trim() : null;
   },
 
   parseLiteral(valueNode: ValueNode) {

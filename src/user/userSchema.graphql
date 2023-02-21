@@ -1,9 +1,12 @@
-scalar Email
-
-type Query {
-  users: String
+type UserDto {
+  _id: String!
+  username: String!
+  role: String!
+}
+type UserDtoList {
+  users: [UserDto]
 }
 
-type Mutation {
-  login(username: Email!, password: String!): String!
+type Query {
+  allUsers: UserDtoList
 }

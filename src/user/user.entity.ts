@@ -1,9 +1,10 @@
 import { Entity, Column, ObjectIdColumn, ObjectID } from 'typeorm';
+import { UserRole } from './dtos/user.dto';
 
 @Entity()
 export class User {
   @ObjectIdColumn()
-  id: ObjectID;
+  _id: ObjectID;
 
   @Column()
   username: string;
@@ -13,4 +14,7 @@ export class User {
 
   @Column()
   token: string;
+
+  @Column()
+  role: UserRole;
 }
