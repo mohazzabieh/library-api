@@ -1,73 +1,144 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Library API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This application developed for test purpose only via below technologies:
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+- [ ] NestJS
+- [ ] GraphQL
+- [ ] MongoDB
+- [ ] Docker
 
-## Description
+There is two type of users
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- [ ] **Admin**: Can view list of users and list of books plus users who borrowed them
+  - Username: admin@demo.com
+  - password: admin
+- [ ] **User**: Can view list of books, loaning and returning them
 
-## Installation
+  - Username: user1@demo.com
+  - password: user1
 
-```bash
-$ yarn install
+  - Username: user2@demo.com
+  - password: user2
+
+**Models will be filled by seeding module**
+
+## Getting started
+
+After clone, there are two ways to run this application:
+
+### Docker-Compose
+
+In order to start this application using docker compose:
+
+```
+cd library-api
+docker-compose up -d --build
+browse http://localhost:3000/graphql
 ```
 
-## Running the app
+### Locally
 
-```bash
-# development
-$ yarn run start
+In order to start this application locally, **make sure that you have already installed mongodb** on your system:
 
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
+```
+cd library-api
+yarn
+yarn test
+yarn seed
+yarn start
+browse http://localhost:3000/graphql
 ```
 
-## Test
+## Config files
 
-```bash
-# unit tests
-$ yarn run test
+Config files placed at **src/env/configs**
 
-# e2e tests
-$ yarn run test:e2e
+- [ ] local.yaml
+- [ ] docker.yaml
 
-# test coverage
-$ yarn run test:cov
+## How it works
+
+First of all, In order to work with the system, you need to login:
+
+```
+mutation {
+  login(username:"admin@demo.com",password:"admin")
+}
 ```
 
-## Support
+OR
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```
+mutation {
+  login(username:"user1@demo.com",password:"user1")
+}
+```
 
-## Stay in touch
+By this, token will be generated. This token must be provided for the rest of Queries/Mutations in **HTTP HEADERS**
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```
+{
+  "Authorization": "Bearer token"
+}
+```
 
-## License
+_Don't forget to replace token!_
 
-Nest is [MIT licensed](LICENSE).
+**List of users**
+
+```
+query {
+  usersList {
+    users {
+      _id
+      username
+      role
+    }
+  }
+}
+```
+
+**List of books**
+
+```
+query {
+  booksList {
+    books {
+      _id
+      title
+      Author
+      loaned
+      loanedBy {
+        _id
+        username
+      }
+      loanedDate
+      returnDate
+    }
+  }
+}
+```
+
+**Loan book**
+
+```
+loanBook(bookId: ObjectId!, returnDate: Date!): Boolean
+```
+
+_Date is a custom scalar. To generate that you can use e.g. new Date(2022, 8,19).getTime()_
+
+**Return book**
+
+```
+returnBook(bookId: ObjectId!): Boolean
+```
+
+## E2E testing
+
+In order to run test locally, MongoDB must be installed. This application will make test database and run End to End testing.
+
+```
+yarn test
+```
+
+![test result](test-result.png)

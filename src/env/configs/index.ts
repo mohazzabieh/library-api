@@ -3,7 +3,11 @@ import * as yaml from 'js-yaml';
 import { join } from 'path';
 
 export default () => {
-  const YAML_CONFIG_FILENAME = 'dev.yaml';
+  let YAML_CONFIG_FILENAME = 'local.yaml';
+
+  if (process.env.PLATFROM === 'docker') {
+    YAML_CONFIG_FILENAME = 'docker.yaml';
+  }
 
   return yaml.load(
     readFileSync(join(__dirname, YAML_CONFIG_FILENAME), 'utf-8'),

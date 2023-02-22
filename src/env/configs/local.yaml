@@ -1,6 +1,5 @@
 port: 3000
 mongo:
-  # In order to run locally, please change url to  'mongodb://127.0.0.1:27017/'
   url: 'mongodb://127.0.0.1:27017/'
   db: 'mohazabieh_library_api'
   testdb: 'mohazabieh_library_api_test'
