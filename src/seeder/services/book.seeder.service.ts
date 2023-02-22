@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { MongoRepository } from 'typeorm';
 import { books } from '../data/books';
 import { Book } from 'src/book/book.entity';
-import { UserDto } from 'src/graphql';
+import { UserDto } from 'src/user/dtos/user.dto';
 
 @Injectable()
 export class BookSeederService {
@@ -12,29 +12,17 @@ export class BookSeederService {
     private readonly bookRepositry: MongoRepository<Book>,
   ) {}
 
-  create(users: UserDto[]): Array<Promise<Book>> {
-    return books.map(async (book) => {
-      return await this.bookRepositry
-        .findOne({
-          where: {
-            title: book.title,
-          },
-        })
-        .then(async (dbBook) => {
-          // Check if a book already exists.
-          // If it does don't create a new one.
-          if (dbBook) {
-            return Promise.resolve(null);
-          }
+  async create(users: UserDto[]): Promise<number | any> {
+    await this.bookRepositry.deleteMany({});
 
-          if (book.loaned) {
-            const index = Math.round(Math.random() * 2);
-            book.loanedBy = users[index];
-          }
+    for (const book of books) {
+      if (book.loaned) {
+        const index = Math.round(Math.random() * 2);
+        book.loanedBy = users[index];
+      }
+      await this.bookRepositry.insertOne(book);
+    }
 
-          return Promise.resolve(await this.bookRepositry.insertOne(book));
-        })
-        .catch((error) => Promise.reject(error));
-    });
+    return books.length;
   }
 }

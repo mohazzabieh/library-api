@@ -377,7 +377,8 @@ describe('GraphQL E2E Test', () => {
         port: 770,
         mongo: {
           url: 'mongoUrl',
-          db: 'test-db',
+          db: 'db',
+          testdb: 'test-db',
         },
       });
 

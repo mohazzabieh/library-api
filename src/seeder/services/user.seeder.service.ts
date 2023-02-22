@@ -13,31 +13,17 @@ export class UserSeederService {
     private readonly authService: AuthService,
   ) {}
 
-  create(): Array<Promise<User>> {
-    return users.map(async (user: IUSer) => {
-      return await this.userRepositry
-        .findOne({
-          where: {
-            username: user.username,
-          },
-        })
-        .then(async (dbUser) => {
-          // Check if a user already exists.
-          // If it does don't create a new one.
-          if (dbUser) {
-            return Promise.resolve(null);
-          }
+  async create(): Promise<number | any> {
+    await this.userRepositry.deleteMany({});
 
-          const password = this.authService.hashPassword(user.password);
+    for (const user of users) {
+      const password = this.authService.hashPassword(user.password);
+      await this.userRepositry.insertOne({
+        ...user,
+        password,
+      });
+    }
 
-          return Promise.resolve(
-            await this.userRepositry.insertOne({
-              ...user,
-              password,
-            }),
-          );
-        })
-        .catch((error) => Promise.reject(error));
-    });
+    return users.length;
   }
 }

@@ -39,30 +39,24 @@ export class Seeder {
     }
   }
   async users() {
-    return await Promise.all(this.userSeederService.create())
-      .then((createdUsers) => {
-        console.log(
-          'No. of users created : ' +
-            createdUsers.filter(
-              (nullValueOrCreatedUser) => nullValueOrCreatedUser,
-            ).length,
-        );
-        return Promise.resolve(true);
-      })
-      .catch((error) => Promise.reject(error));
+    try {
+      const createdUsers = await this.userSeederService.create();
+      console.log(`No. of users created : ${createdUsers}`);
+
+      return true;
+    } catch (err) {
+      return Promise.reject(err);
+    }
   }
 
   async books(usersList: UserDtoList) {
-    return await Promise.all(this.bookSeederService.create(usersList.users))
-      .then((createdBooks) => {
-        console.log(
-          'No. of books created : ' +
-            createdBooks.filter(
-              (nullValueOrCreatedUser) => nullValueOrCreatedUser,
-            ).length,
-        );
-        return Promise.resolve(true);
-      })
-      .catch((error) => Promise.reject(error));
+    try {
+      const createdBooks = await this.bookSeederService.create(usersList.users);
+      console.log(`No. of books created: ${createdBooks}`);
+
+      return true;
+    } catch (err) {
+      return Promise.reject(err);
+    }
   }
 }

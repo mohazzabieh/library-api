@@ -14,7 +14,9 @@ export class EnvService {
 
   readonly mongoConfig: MongoConfig = {
     url: this.configService.get<string>('mongo.url'),
-    database: this.configService.get<string>('mongo.db'),
+    database: this.configService.get<string>(
+      process.env.NODE_ENV === 'test' ? 'mongo.testdb' : 'mongo.db',
+    ),
   };
 
   readonly salt: string = this.configService.get<string>('salt');
